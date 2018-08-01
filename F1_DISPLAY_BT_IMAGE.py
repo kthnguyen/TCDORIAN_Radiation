@@ -17,7 +17,7 @@ import glob,os
 
 
 WORKPLACE = r"C:\Users\z3439910\Documents\Kien\1_Projects\2_Msc\1_E1\5_GIS_project\IR_Dorina"
-IMDIR = WORKPLACE + r"\IRimages_remap_interpolate_masked_new"
+IMDIR = WORKPLACE + r"\IRimages_remap_region"
 os.chdir(IMDIR)
 files = glob.glob("2013*.nc")
 
@@ -44,7 +44,7 @@ df_reindexed.reset_index(inplace = True)
 #%%for testing
 i = 0
 filename = files[i]
-filename = '201307310100.nc'
+#filename = '201307310100.nc'
 #get center point from best track
 step = df_reindexed.iloc[i] 
 t_lat = step.lat
@@ -77,6 +77,6 @@ ax.set_title('TC Dorian    '+filename.replace(".nc",""))
 ax.set_xlabel('Longtitude')
 ax.set_ylabel('Latitude')
 
-#plt.plot(t_lon,t_lat,'og', markersize = 2)  
+plt.plot(t_lon,t_lat,'or', markersize = 2)  
 
 plt.show()

@@ -18,6 +18,7 @@ from matplotlib import colors
 import numba
 from numba import vectorize, float64, int16, guvectorize, jit
 import pickle
+import h5py
 
 
 
@@ -25,8 +26,8 @@ WORKPLACE = r"C:\Users\z3439910\Documents\Kien\1_Projects\2_Msc\1_E1\5_GIS_proje
 IRDIR = WORKPLACE + r"\IRimages_remap_region"
 SAVDIR = WORKPLACE + r"\Figures\080731_whole_region_labelling"
 DTB = WORKPLACE + r"\Python_codes\Pickle_database"
+os.chdir(IRDIR)
 
-Cdataset = xr.open_dataset(IRDIR + r"\IRDORINA_combined.nc")
 
 #%% Best track
 
@@ -50,7 +51,22 @@ df_reindexed = df_reindexed.interpolate(method='time')
 df_reindexed.index.name = 'time'
 df_reindexed.reset_index(inplace = True)
 
-#%%
-Cflag_TC = np.zeros([Cdataset.sizes['time'],Cdataset.sizes['lon_y'],Cdataset.sizes['lat_x']])
-Cflag_nonTC = np.zeros([Cdataset.sizes['time'],Cdataset.sizes['lon_y'],Cdataset.sizes['lat_x']])
-Cflag_BG = np.zeros([Cdataset.sizes['time'],Cdataset.sizes['lon_y'],Cdataset.sizes['lat_x']])
+#%% Create a HDF5 file
+Hfile_label = h5py.File('TCDORIAN_label.h5','w')
+Hfile_label.close()
+
+#%% Generate label matrices in the HDF5 file, then close it
+Hfile_imag = h5py.File('TCDORIAN.h5','r')
+dim_lat = np.shape(Hfile_imag['latitude'])[0]
+dim_lon = np.shape(Hfile_imag['longitude'])[0]
+dim_time = np.shape(Hfile_imag['time'])[0]
+
+Hfile_label = h5py.File('TCDORIAN_label.h5','r+')
+Hfile_label.create_dataset('label_TC', shape = (dim_lat,dim_lon,dim_time))
+Hfile_label.create_dataset('label_nonTC', shape = (dim_lat,dim_lon,dim_time))
+Hfile_label.create_dataset('label_BG', shape = (dim_lat,dim_lon,dim_time))
+#%
+Hfile_label.close()
+Hfile_imag.close()
+
+#%%  
