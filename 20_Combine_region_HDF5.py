@@ -18,9 +18,6 @@ import time as TIME
 import h5py
 from datetime import datetime
 
-
-
-
 WORKPLACE = r"C:\Users\z3439910\Documents\Kien\1_Projects\2_Msc\1_E1\5_GIS_project\IR_Dorina"
 IRDIR = WORKPLACE + r"\IRimages_remap_region"
 os.chdir(IRDIR)
